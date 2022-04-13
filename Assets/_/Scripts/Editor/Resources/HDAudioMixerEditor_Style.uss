@@ -1,0 +1,52 @@
+TemplateContainer
+{
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.header
+{
+    -unity-font-style: bold;
+    font-size: 20px;
+}
+
+#mixer-list-view
+{
+    flex-grow: 1;
+    flex-direction: column;
+    min-width: 100px;
+    max-width: 200px;
+}
+
+#mixer-list
+{
+    flex-grow: 1;
+    margin: 5px;
+}
+
+TextField
+{
+    max-width: 1000px;
+}
+
+#mixer-create-button
+{
+    max-width: 1000px;
+}
+
+#mixer-info
+{
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+}
+
+#mixer-properties
+{
+    width: 100%;
+}
+
+#mixer-remove-button
+{
+    max-width: 1000px;
+}

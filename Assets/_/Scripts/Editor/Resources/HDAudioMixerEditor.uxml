@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <engine:VisualElement name="mixer-list-view">
+        <engine:ListView name="mixer-list"/>
+        <engine:TextField name="new-mixer-name"/>
+        <engine:Button name="mixer-create-button"/>
+        <engine:Button name="mixer-remove-button"/>
+    </engine:VisualElement>
+    <engine:Box name="mixer-info">
+        <engine:ScrollView name="mixer-properties"/>
+    </engine:Box>
+</UXML>
