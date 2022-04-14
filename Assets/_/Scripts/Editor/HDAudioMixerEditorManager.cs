@@ -7,15 +7,35 @@ namespace HerbiDino.Audio
 {
     public class HDAudioMixerEditorManager
     {
-        public HDAudioMixerSO EditingMixer { get; set; }
+        public HDAudioMixerSO EditingMixer
+        {
+            get => editingMixer;
+            set
+            {
+                editingMixer = value;
+                onMixerChange?.Invoke(value);
+            }
+        }
+
+        public UnityEvent<HDAudioMixerSO> onMixerChange;
         public UnityEvent<HDAudioMixerSO> onCreateMixer;
         public UnityEvent<bool> onRemoveMixer;
         public UnityEvent<HDAudioEffectSO> onCreateEffect;
         public UnityEvent<bool> onRemoveEffect;
 
         private string storagePath = null;
+        private HDAudioMixerSO editingMixer;
 
         private const string MIXER_ASSET = "Mixer.asset";
+
+        public HDAudioMixerEditorManager()
+        {
+            onMixerChange = new UnityEvent<HDAudioMixerSO>();
+            onCreateMixer = new UnityEvent<HDAudioMixerSO>();
+            onRemoveMixer = new UnityEvent<bool>();
+            onCreateEffect = new UnityEvent<HDAudioEffectSO>();
+            onRemoveEffect = new UnityEvent<bool>();
+        }
 
         public void SetMixerStoragePath(string path)
         {
