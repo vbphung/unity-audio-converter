@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:engine="UnityEngine.UIElements"
+  xmlns:editor="UnityEditor.UIElements"
+  xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
 >
-    <engine:VisualElement name="mixer-list-view">
-        <engine:ListView name="mixer-list"/>
-        <engine:TextField name="new-mixer-name"/>
-        <engine:Button name="mixer-create-button"/>
-        <engine:Button name="mixer-remove-button"/>
-    </engine:VisualElement>
-    <engine:Box name="mixer-info">
-        <engine:ScrollView name="mixer-properties"/>
+  <engine:Box name="mixer-list-view">
+    <engine:ListView name="mixer-list" />
+
+    <engine:Box class="mixer-controller">
+      <engine:TextElement text="Create Mixer" />
+
+      <engine:TextField name="new-mixer-name" />
+
+      <engine:Button class="mixer-button" name="mixer-create-button" />
     </engine:Box>
+
+    <engine:Box class="mixer-controller">
+      <engine:TextElement text="Remove Mixer" />
+
+      <engine:Button class="mixer-button" name="mixer-remove-button" />
+    </engine:Box>
+  </engine:Box>
+
+  <engine:Box name="mixer-info">
+    <engine:ScrollView name="mixer-properties" />
+
+    <engine:Box name="effect-controller">
+      <engine:TextElement text="Move Effect" />
+
+      <engine:TextField name="effect-index" />
+    </engine:Box>
+
+    <engine:Box name="effect-controller">
+      <engine:TextElement text="Create Effect" />
+
+      <editor:EnumField name="mixer-type" />
+
+      <engine:Button
+        class="effect-button"
+        name="effect-create-button"
+        text="Create Effect"
+      />
+    </engine:Box>
+
+    <engine:Box name="effect-controller">
+      <engine:TextElement text="Remove Effect" />
+
+      <engine:Button
+        class="effect-button"
+        name="effect-remove-button"
+        text="Remove Effect"
+      />
+    </engine:Box>
+  </engine:Box>
 </UXML>

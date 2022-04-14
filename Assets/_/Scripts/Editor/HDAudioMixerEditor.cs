@@ -14,6 +14,7 @@ namespace HerbiDino.Audio
         private ListView mixerLs;
         private HDAudioMixerSO[] mixers;
 
+        #region Default
         [MenuItem("HerbiDino/Audio Mixer")]
         private static void ShowWindow()
         {
@@ -44,8 +45,11 @@ namespace HerbiDino.Audio
             SetupCreateMixer();
             SetupRemoveMixer();
 
+            SetupCreateEffect();
+
             ShowMixerOnEnable();
         }
+        #endregion
 
         #region Setup
         private void SetupMixerLs()
@@ -61,14 +65,15 @@ namespace HerbiDino.Audio
 
         private void SetupCreateMixer()
         {
-            TextField newMixerName = rootVisualElement.Query<TextField>("new-audioMixer-name").First();
+            TextField newMixerName = rootVisualElement.Query<TextField>("new-mixer-name").First();
+            newMixerName.value = "New Mixer";
 
             var createMixerBtn = rootVisualElement.Query<Button>("mixer-create-button").First();
             createMixerBtn.text = "New Mixer";
             createMixerBtn.clicked += () =>
             {
                 CreateMixer(newMixerName.value);
-                newMixerName.value = "";
+                newMixerName.value = "New Mixer";
             };
         }
 
@@ -183,6 +188,29 @@ namespace HerbiDino.Audio
             LoadAllMixers();
             mixerLs.itemsSource = mixers;
             mixerLs.Refresh();
+        }
+        #endregion
+
+        #region EffectManagement
+        private void SetupCreateEffect()
+        {
+            var sfxType = rootVisualElement.Query<EnumField>("mixer-type").First();
+            sfxType.Init(HDEffectType.Chorus);
+        }
+
+        private void RemoveEffect()
+        {
+
+        }
+
+        private void MoveEffectUp()
+        {
+
+        }
+
+        private void MoveEffectDown()
+        {
+
         }
         #endregion
     }

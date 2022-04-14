@@ -1,52 +1,67 @@
-TemplateContainer
-{
-    flex-grow: 1;
-    flex-direction: row;
+TemplateContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
 }
 
-.header
-{
-    -unity-font-style: bold;
-    font-size: 20px;
+.header {
+  -unity-font-style: bold;
+  font-size: 20px;
 }
 
-#mixer-list-view
-{
-    flex-grow: 1;
-    flex-direction: column;
-    min-width: 100px;
-    max-width: 200px;
+#mixer-list-view {
+  flex-grow: 1;
+  flex-direction: column;
+  min-width: 100px;
+  max-width: 300px;
+  padding-right: 8px;
 }
 
-#mixer-list
-{
-    flex-grow: 1;
-    margin: 5px;
+#mixer-list {
+  flex-grow: 1;
 }
 
-TextField
-{
-    max-width: 1000px;
+TextField {
+  width: 100%;
+  max-width: 1000px;
 }
 
-#mixer-create-button
-{
-    max-width: 1000px;
+TextElement {
+  -unity-font-style: bold;
 }
 
-#mixer-info
-{
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: center;
+#mixer-info {
+  flex-grow: 2;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
 }
 
-#mixer-properties
-{
-    width: 100%;
+#mixer-properties {
+  width: 100%;
 }
 
-#mixer-remove-button
-{
-    max-width: 1000px;
+#mixer-type {
+  width: 100%;
+  max-width: 1000px;
+}
+
+Button {
+  width: 100%;
+  max-width: 1000px;
+}
+
+#effect-controller {
+  width: 100%;
+  margin: 4px;
+  padding: 4px;
+  padding-right: 8px;
+  background-color: rgb(120, 120, 120);
+}
+
+.mixer-controller {
+  background-color: rgb(120, 120, 120);
+  padding: 4px;
+  margin: 4px;
+  padding-right: 8px;
 }
