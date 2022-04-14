@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace HerbiDino.Audio
 {
-    public class HDAudioEffectSO : ScriptableObject
+    public abstract class HDAudioEffectSO : ScriptableObject
     {
-
+        public abstract HDEffectType Type { get; }
     }
 }

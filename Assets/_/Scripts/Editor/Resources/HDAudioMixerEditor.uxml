@@ -6,53 +6,57 @@
   xmlns:editor="UnityEditor.UIElements"
   xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
 >
-  <engine:Box name="mixer-list-view">
-    <engine:ListView name="mixer-list" />
+  <engine:VisualElement>
+    <engine:Box class="path input">
+      <engine:TextElement text="Storage Path" class="title" />
 
-    <engine:Box class="mixer-controller">
-      <engine:TextElement text="Create Mixer" />
-
-      <engine:TextField name="new-mixer-name" />
-
-      <engine:Button class="mixer-button" name="mixer-create-button" />
+      <engine:TextField name="storage_path" />
     </engine:Box>
 
-    <engine:Box class="mixer-controller">
-      <engine:TextElement text="Remove Mixer" />
+    <engine:VisualElement class="main">
+      <engine:Box class="section" name="mixerLs">
+        <engine:ScrollView />
 
-      <engine:Button class="mixer-button" name="mixer-remove-button" />
-    </engine:Box>
-  </engine:Box>
+        <engine:Box class="mixer">
+          <engine:TextElement text="Create Mixer" class="title" />
 
-  <engine:Box name="mixer-info">
-    <engine:ScrollView name="mixer-properties" />
+          <engine:Box class="input">
+            <engine:TextElement text="Mixer Name" />
 
-    <engine:Box name="effect-controller">
-      <engine:TextElement text="Move Effect" />
+            <engine:TextField name="new_mixer" />
+          </engine:Box>
 
-      <engine:TextField name="effect-index" />
-    </engine:Box>
+          <engine:Button text="Create Mixer" name="createMixerBtn" />
+        </engine:Box>
 
-    <engine:Box name="effect-controller">
-      <engine:TextElement text="Create Effect" />
+        <engine:Box class="mixer">
+          <engine:TextElement text="Remove Mixer" class="title" />
 
-      <editor:EnumField name="mixer-type" />
+          <engine:Button text="Remove Mixer" name="removeMixerBtn" />
+        </engine:Box>
+      </engine:Box>
 
-      <engine:Button
-        class="effect-button"
-        name="effect-create-button"
-        text="Create Effect"
-      />
-    </engine:Box>
+      <engine:Box class="section" name="effectLs">
+        <engine:ScrollView />
 
-    <engine:Box name="effect-controller">
-      <engine:TextElement text="Remove Effect" />
+        <engine:Box class="effect">
+          <engine:TextElement text="Create Effect" class="title" />
 
-      <engine:Button
-        class="effect-button"
-        name="effect-remove-button"
-        text="Remove Effect"
-      />
-    </engine:Box>
-  </engine:Box>
+          <engine:Box class="input">
+            <engine:TextElement text="Effect Type" />
+
+            <editor:EnumField name="effectType" />
+          </engine:Box>
+
+          <engine:Button text="Create Effect" name="createEffectBtn" />
+        </engine:Box>
+
+        <engine:Box class="effect">
+          <engine:TextElement text="Remove Effect" class="title" />
+
+          <engine:Button text="Remove Effect" name="removeEffectBtn" />
+        </engine:Box>
+      </engine:Box>
+    </engine:VisualElement>
+  </engine:VisualElement>
 </UXML>

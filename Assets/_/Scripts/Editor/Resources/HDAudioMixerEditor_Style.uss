@@ -1,67 +1,85 @@
 TemplateContainer {
   flex-grow: 1;
+}
+
+VisualElement {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+Box {
+  border-radius: 4px;
+  padding: 4px;
+}
+
+ScrollView {
+  flex: 1;
+}
+
+TextField {
+  flex: 1;
+  margin-left: 8px;
+}
+
+EnumField {
+  flex: 1;
+  margin-left: 8px;
+}
+
+Button {
+  width: 45%;
+  align-self: center;
+}
+
+.path {
+  margin: 4px;
+  background-color: black;
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.main {
   display: flex;
   flex-direction: row;
 }
 
-.header {
-  -unity-font-style: bold;
-  font-size: 20px;
-}
-
-#mixer-list-view {
-  flex-grow: 1;
-  flex-direction: column;
-  min-width: 100px;
-  max-width: 300px;
-  padding-right: 8px;
-}
-
-#mixer-list {
-  flex-grow: 1;
-}
-
-TextField {
+.section {
+  height: 100%;
   width: 100%;
-  max-width: 1000px;
+  background-color: black;
 }
 
-TextElement {
+.title {
   -unity-font-style: bold;
 }
 
-#mixer-info {
-  flex-grow: 2;
+.mixer {
+  background-color: #202020;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.effect {
+  background-color: #202020;
+  width: 100%;
+  margin-top: 4px;
+}
+
+#mixerLs {
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 8px;
+  margin: 0 4px;
+  flex: 1;
 }
 
-#mixer-properties {
-  width: 100%;
-}
-
-#mixer-type {
-  width: 100%;
-  max-width: 1000px;
-}
-
-Button {
-  width: 100%;
-  max-width: 1000px;
-}
-
-#effect-controller {
-  width: 100%;
-  margin: 4px;
-  padding: 4px;
-  padding-right: 8px;
-  background-color: rgb(120, 120, 120);
-}
-
-.mixer-controller {
-  background-color: rgb(120, 120, 120);
-  padding: 4px;
-  margin: 4px;
-  padding-right: 8px;
+#effectLs {
+  display: flex;
+  flex-direction: column;
+  margin-right: 4px;
+  flex: 3;
 }
