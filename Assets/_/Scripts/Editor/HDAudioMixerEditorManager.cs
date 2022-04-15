@@ -13,12 +13,13 @@ namespace HerbiDino.Audio
             set
             {
                 editingMixer = value;
-                onMixerChange?.Invoke(value);
+                onChangeMixer?.Invoke(value);
             }
         }
         public List<HDAudioMixerSO> MixerList { get; set; }
 
-        public UnityEvent<HDAudioMixerSO> onMixerChange;
+        public UnityEvent<HDAudioMixerSO> onChangeMixer;
+        public UnityEvent onChangeMixerList;
         public UnityEvent<HDAudioMixerSO> onCreateMixer;
         public UnityEvent<bool> onRemoveMixer;
         public UnityEvent<HDAudioEffectSO> onCreateEffect;
@@ -31,7 +32,8 @@ namespace HerbiDino.Audio
 
         public HDAudioMixerEditorManager()
         {
-            onMixerChange = new UnityEvent<HDAudioMixerSO>();
+            onChangeMixer = new UnityEvent<HDAudioMixerSO>();
+            onChangeMixerList = new UnityEvent();
             onCreateMixer = new UnityEvent<HDAudioMixerSO>();
             onRemoveMixer = new UnityEvent<bool>();
             onCreateEffect = new UnityEvent<HDAudioEffectSO>();
@@ -162,6 +164,8 @@ namespace HerbiDino.Audio
                 var mixer = AssetDatabase.LoadAssetAtPath<HDAudioMixerSO>(path);
                 MixerList.Add(mixer);
             }
+
+            onChangeMixerList?.Invoke();
         }
     }
 }

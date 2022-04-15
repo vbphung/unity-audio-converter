@@ -19,9 +19,16 @@ namespace HerbiDino.Audio
             }
         }
 
+        private HDAudioMixerSO EditingMixer => Manager.EditingMixer;
+
         private ListView mixerListView;
         private ScrollView effectScrollView;
         private HDAudioMixerEditorManager manager = null;
+
+        private const string MIXER_LIST = "mixerLs";
+        private const string EFFECT_LIST = "effectLs";
+        private const string EFFECT_VIEW = "effect";
+        private const string TITLE = "title";
 
         private void OnEnable()
         {
@@ -31,7 +38,7 @@ namespace HerbiDino.Audio
 
         private void SetupManager()
         {
-            Manager.onMixerChange.AddListener(ShowMixer);
+            Manager.onChangeMixer.AddListener(ShowMixer);
         }
 
         private void SetupVisual()
@@ -44,10 +51,10 @@ namespace HerbiDino.Audio
 
         private void SetupMixerListView()
         {
-            mixerListView = rootVisualElement.Query<ListView>("mixerLs");
-            mixerListView.itemsSource = manager.MixerList;
+            mixerListView = rootVisualElement.Query<ListView>(MIXER_LIST);
+            mixerListView.itemsSource = Manager.MixerList;
             mixerListView.makeItem = () => new Label();
-            mixerListView.bindItem = (element, index) => (element as Label).text = manager.MixerList[index].name;
+            mixerListView.bindItem = (element, index) => (element as Label).text = Manager.MixerList[index].name;
             mixerListView.itemHeight = 20;
             mixerListView.selectionType = SelectionType.Single;
             mixerListView.onSelectionChange += mixers =>
@@ -58,16 +65,62 @@ namespace HerbiDino.Audio
                     return;
                 }
             };
+
+            Manager.onChangeMixerList.AddListener(() =>
+            {
+                mixerListView.itemsSource = Manager.MixerList;
+                mixerListView.Refresh();
+            });
         }
 
         private void ShowMixer(HDAudioMixerSO mixer)
         {
+            effectScrollView.Clear();
+            foreach (var sfx in EditingMixer.Effects)
+                ShowEffect(sfx);
+        }
 
+        private void ShowEffect(HDAudioEffectSO sfx)
+        {
+            var sfxView = CreateEffectView(sfx);
+            effectScrollView.Add(sfxView);
+        }
+
+        private Box CreateEffectView(HDAudioEffectSO sfx)
+        {
+            var sfxView = new Box();
+            sfxView.AddToClassList(EFFECT_VIEW);
+            sfxView.Add(CreateTextElement(TITLE, sfx.Type.ToString()));
+
+            var sfxObj = new SerializedObject(sfx);
+
+            var sfxProp = sfxObj.GetIterator();
+            sfxProp.Next(true);
+
+            while (sfxProp.NextVisible(false))
+            {
+                var propField = new PropertyField(sfxProp);
+
+                propField.SetEnabled(sfxProp.name != "m_Script");
+                propField.Bind(sfxObj);
+                sfxView.Add(propField);
+            }
+
+            return sfxView;
         }
 
         private void SetupEffectScrollView()
         {
-            effectScrollView = rootVisualElement.Query<ScrollView>("effectLs");
+            effectScrollView = rootVisualElement.Query<ScrollView>(EFFECT_LIST);
+        }
+
+        private TextElement CreateTextElement(string className, string text)
+        {
+            var textElement = new TextElement();
+            textElement.text = text;
+            textElement.AddToClassList(className);
+
+            return textElement;
         }
 
         [MenuItem("HerbiDino/Audio/Audio Mixer")]

@@ -58,6 +58,11 @@ Button {
   background-color: black;
 }
 
+.effect {
+  background-color: #202020;
+  margin-bottom: 4px;
+}
+
 .title {
   -unity-font-style: bold;
 }
