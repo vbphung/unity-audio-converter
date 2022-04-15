@@ -23,21 +23,15 @@ namespace HerbiDino.Audio
                 var isValidDir = CheckStorageDir(value);
                 if (isValidDir) storagePath = value;
 
-                onStoragePathChange?.Invoke(isValidDir);
+                onChangeStoragePath?.Invoke(isValidDir);
             }
         }
         public List<HDAudioMixerSO> MixerList { get; set; }
 
-        public UnityEvent<bool> onStoragePathChange;
-
+        public UnityEvent<bool> onChangeStoragePath;
         public UnityEvent onChangeMixerList;
-
         public UnityEvent<HDAudioMixerSO> onChangeMixer;
-        public UnityEvent<HDAudioMixerSO> onCreateMixer;
-        public UnityEvent<bool> onRemoveMixer;
-
-        public UnityEvent<HDAudioEffectSO> onCreateEffect;
-        public UnityEvent<bool> onRemoveEffect;
+        public UnityEvent onChangeEditingMixer;
 
         private static string storagePath = null;
         private HDAudioMixerSO editingMixer;
@@ -46,25 +40,18 @@ namespace HerbiDino.Audio
 
         public HDAudioMixerEditorManager()
         {
-            onStoragePathChange = new UnityEvent<bool>();
-
+            onChangeStoragePath = new UnityEvent<bool>();
             onChangeMixerList = new UnityEvent();
-
             onChangeMixer = new UnityEvent<HDAudioMixerSO>();
-            onCreateMixer = new UnityEvent<HDAudioMixerSO>();
-            onRemoveMixer = new UnityEvent<bool>();
-
-            onCreateEffect = new UnityEvent<HDAudioEffectSO>();
-            onRemoveEffect = new UnityEvent<bool>();
+            onChangeEditingMixer = new UnityEvent();
 
             LoadAllMixers();
         }
 
         public void CreateMixer(string name)
         {
-            if (storagePath != null || string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            if (storagePath == null || string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
             {
-                onCreateMixer?.Invoke(null);
                 return;
             }
 
@@ -74,26 +61,27 @@ namespace HerbiDino.Audio
             AssetDatabase.CreateAsset(mixer, $"{GetMixerDir(name)}{MIXER_ASSET}");
             AssetDatabase.SaveAssets();
 
-            onCreateMixer?.Invoke(mixer);
+            LoadAllMixers();
+            EditingMixer = mixer;
         }
 
         public void RemoveMixer()
         {
             if (EditingMixer == null)
             {
-                onRemoveMixer?.Invoke(false);
                 return;
             }
 
             AssetDatabase.DeleteAsset(GetMixerDir(EditingMixer.name));
-            onRemoveMixer?.Invoke(true);
+
+            LoadAllMixers();
+            EditingMixer = MixerList.Count > 0 ? MixerList[0] : null;
         }
 
         public void CreateEffect(HDEffectType sfxType)
         {
             if (!CanCreateEffect(sfxType))
             {
-                onCreateEffect?.Invoke(null);
                 return;
             }
 
@@ -105,14 +93,13 @@ namespace HerbiDino.Audio
             EditingMixer.Effects.Add(sfx);
             EditorUtility.SetDirty(EditingMixer);
 
-            onCreateEffect?.Invoke(sfx);
+            onChangeEditingMixer?.Invoke();
         }
 
         public void RemoveEffect(int sfxIndex)
         {
             if (EditingMixer == null || sfxIndex >= EditingMixer.Effects.Count)
             {
-                onRemoveEffect?.Invoke(false);
                 return;
             }
 
@@ -122,7 +109,7 @@ namespace HerbiDino.Audio
             AssetDatabase.DeleteAsset(GetEffectDir(EditingMixer.name, sfx.Type));
             AssetDatabase.SaveAssets();
 
-            onRemoveEffect?.Invoke(true);
+            onChangeEditingMixer?.Invoke();
         }
 
         private string GetMixerDir(string name)

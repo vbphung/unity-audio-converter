@@ -51,6 +51,7 @@ namespace HerbiDino.Audio
         private void SetupManager()
         {
             Manager.onChangeMixer.AddListener(ShowMixer);
+            Manager.onChangeEditingMixer.AddListener(() => ShowMixer(Manager.EditingMixer));
         }
 
         private void SetupVisual()
@@ -79,7 +80,7 @@ namespace HerbiDino.Audio
                 SetStoragePathState(checkResult, true);
             }
 
-            Manager.onStoragePathChange.AddListener(isValidDir => SetStoragePathState(checkResult, isValidDir));
+            Manager.onChangeStoragePath.AddListener(isValidDir => SetStoragePathState(checkResult, isValidDir));
 
             checkPathBtn.clicked += () =>
             {
@@ -102,6 +103,9 @@ namespace HerbiDino.Audio
         private void ShowMixer(HDAudioMixerSO mixer)
         {
             effectScrollView.Clear();
+
+            if (mixer == null) return;
+
             foreach (var sfx in EditingMixer.Effects)
                 ShowEffect(sfx);
         }
