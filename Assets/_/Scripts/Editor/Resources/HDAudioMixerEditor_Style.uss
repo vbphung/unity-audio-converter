@@ -60,6 +60,7 @@ EnumField {
 
 .title {
   -unity-font-style: bold;
+  margin-right: 4px;
 }
 
 .safe {

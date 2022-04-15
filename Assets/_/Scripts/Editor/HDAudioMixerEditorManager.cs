@@ -16,6 +16,16 @@ namespace HerbiDino.Audio
                 onChangeMixer?.Invoke(value);
             }
         }
+        public string StoragePath
+        {
+            get => storagePath; set
+            {
+                var isValidDir = CheckStorageDir(value);
+                if (isValidDir) storagePath = value;
+
+                onStoragePathChange?.Invoke(isValidDir);
+            }
+        }
         public List<HDAudioMixerSO> MixerList { get; set; }
 
         public UnityEvent<bool> onStoragePathChange;
@@ -29,7 +39,7 @@ namespace HerbiDino.Audio
         public UnityEvent<HDAudioEffectSO> onCreateEffect;
         public UnityEvent<bool> onRemoveEffect;
 
-        private string storagePath = null;
+        private static string storagePath = null;
         private HDAudioMixerSO editingMixer;
 
         private const string MIXER_ASSET = "Mixer.asset";
@@ -48,14 +58,6 @@ namespace HerbiDino.Audio
             onRemoveEffect = new UnityEvent<bool>();
 
             LoadAllMixers();
-        }
-
-        public void SetMixerStoragePath(string path)
-        {
-            var isValidDir = CheckStorageDir(path);
-            if (isValidDir) storagePath = path;
-
-            onStoragePathChange?.Invoke(isValidDir);
         }
 
         public void CreateMixer(string name)

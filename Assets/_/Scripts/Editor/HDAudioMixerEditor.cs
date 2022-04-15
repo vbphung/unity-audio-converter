@@ -73,24 +73,17 @@ namespace HerbiDino.Audio
             var checkResult = rootVisualElement.Query<TextElement>(STORAGE_PATH_RESULT).First();
             if (checkResult == null) return;
 
-            Manager.onStoragePathChange.AddListener(isValidDir =>
+            if (Manager.StoragePath != null)
             {
-                checkResult.ClearClassList();
-                if (isValidDir)
-                {
-                    checkResult.AddToClassList("safe");
-                    checkResult.text = "Valid Path";
-                }
-                else
-                {
-                    checkResult.AddToClassList("error");
-                    checkResult.text = "Invalid Path";
-                }
-            });
+                pathText.value = Manager.StoragePath;
+                SetStoragePathState(checkResult, true);
+            }
+
+            Manager.onStoragePathChange.AddListener(isValidDir => SetStoragePathState(checkResult, isValidDir));
 
             checkPathBtn.clicked += () =>
             {
-                Manager.SetMixerStoragePath(pathText.value);
+                Manager.StoragePath = pathText.value;
             };
         }
 
@@ -235,6 +228,21 @@ namespace HerbiDino.Audio
             if (removeEffectBtn == null) return;
 
             removeEffectBtn.clicked += () => Manager.RemoveEffect(0);
+        }
+
+        private void SetStoragePathState(TextElement stateText, bool isValid)
+        {
+            stateText.ClearClassList();
+            if (isValid)
+            {
+                stateText.AddToClassList("safe");
+                stateText.text = "Valid Path";
+            }
+            else
+            {
+                stateText.AddToClassList("error");
+                stateText.text = "Invalid Path";
+            }
         }
     }
 }
