@@ -2,12 +2,6 @@ TemplateContainer {
   flex-grow: 1;
 }
 
-VisualElement {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
 Box {
   border-radius: 4px;
   padding: 4px;
@@ -31,9 +25,8 @@ EnumField {
   margin-left: 8px;
 }
 
-Button {
-  width: 45%;
-  align-self: center;
+.editor {
+  flex-grow: 1;
 }
 
 .path {
@@ -49,7 +42,9 @@ Button {
 
 .main {
   display: flex;
+  flex-grow: 1;
   flex-direction: row;
+  padding-bottom: 4px;
 }
 
 .section {
@@ -67,13 +62,30 @@ Button {
   -unity-font-style: bold;
 }
 
-.mixer {
+.safe {
+  padding: 2px 4px;
+  -unity-font-style: bold;
+  background-color: green;
+}
+
+.error {
+  padding: 2px 4px;
+  -unity-font-style: bold;
+  background-color: red;
+}
+
+.mgrBtn {
+  width: 45%;
+  align-self: center;
+}
+
+.mixerMgr {
   background-color: #202020;
   width: 100%;
   margin-top: 4px;
 }
 
-.effect {
+.effectMgr {
   background-color: #202020;
   width: 100%;
   margin-top: 4px;

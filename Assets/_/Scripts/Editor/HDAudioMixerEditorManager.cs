@@ -18,10 +18,14 @@ namespace HerbiDino.Audio
         }
         public List<HDAudioMixerSO> MixerList { get; set; }
 
-        public UnityEvent<HDAudioMixerSO> onChangeMixer;
+        public UnityEvent<bool> onStoragePathChange;
+
         public UnityEvent onChangeMixerList;
+
+        public UnityEvent<HDAudioMixerSO> onChangeMixer;
         public UnityEvent<HDAudioMixerSO> onCreateMixer;
         public UnityEvent<bool> onRemoveMixer;
+
         public UnityEvent<HDAudioEffectSO> onCreateEffect;
         public UnityEvent<bool> onRemoveEffect;
 
@@ -32,10 +36,14 @@ namespace HerbiDino.Audio
 
         public HDAudioMixerEditorManager()
         {
-            onChangeMixer = new UnityEvent<HDAudioMixerSO>();
+            onStoragePathChange = new UnityEvent<bool>();
+
             onChangeMixerList = new UnityEvent();
+
+            onChangeMixer = new UnityEvent<HDAudioMixerSO>();
             onCreateMixer = new UnityEvent<HDAudioMixerSO>();
             onRemoveMixer = new UnityEvent<bool>();
+
             onCreateEffect = new UnityEvent<HDAudioEffectSO>();
             onRemoveEffect = new UnityEvent<bool>();
 
@@ -44,12 +52,15 @@ namespace HerbiDino.Audio
 
         public void SetMixerStoragePath(string path)
         {
-            storagePath = path;
+            var isValidDir = CheckStorageDir(path);
+            if (isValidDir) storagePath = path;
+
+            onStoragePathChange?.Invoke(isValidDir);
         }
 
         public void CreateMixer(string name)
         {
-            if (!AssetDatabase.IsValidFolder(storagePath) || string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            if (storagePath != null || string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
             {
                 onCreateMixer?.Invoke(null);
                 return;
@@ -64,7 +75,7 @@ namespace HerbiDino.Audio
             onCreateMixer?.Invoke(mixer);
         }
 
-        public void RemoveMixer(string name)
+        public void RemoveMixer()
         {
             if (EditingMixer == null)
             {
@@ -166,6 +177,11 @@ namespace HerbiDino.Audio
             }
 
             onChangeMixerList?.Invoke();
+        }
+
+        private bool CheckStorageDir(string storageDir)
+        {
+            return AssetDatabase.IsValidFolder(storageDir);
         }
     }
 }

@@ -25,9 +25,21 @@ namespace HerbiDino.Audio
         private ScrollView effectScrollView;
         private HDAudioMixerEditorManager manager = null;
 
-        private const string MIXER_LIST = "mixerLs";
-        private const string EFFECT_LIST = "effectLs";
-        private const string EFFECT_VIEW = "effect";
+        private const string STORAGE_PATH = "storagePath";
+        private const string CHECK_STORAGE_PATH = "checkStoragePath";
+        private const string STORAGE_PATH_RESULT = "storagePathResult";
+
+        private const string MIXER_VIEW = "mixerLs";
+        private const string MIXER_NAME = "newMixer";
+        private const string CREATE_MIXER_BUTTON = "createMixerBtn";
+        private const string REMOVE_MIXER_BUTTON = "removeMixerBtn";
+
+        private const string EFFECT_VIEW = "effectLs";
+        private const string EFFECT = "effect";
+        private const string EFFECT_TYPE = "effectType";
+        private const string CREATE_EFFECT_BUTTON = "createEffectBtn";
+        private const string REMOVE_EFFECT_BUTTON = "removeEffectBtn";
+
         private const string TITLE = "title";
 
         private void OnEnable()
@@ -45,13 +57,113 @@ namespace HerbiDino.Audio
         {
             LoadVisualTreeAsset();
 
+            SetupStoragePath();
+            SetupMixerView();
+            SetupEffectView();
+        }
+
+        private void SetupStoragePath()
+        {
+            var pathText = rootVisualElement.Query<TextField>(STORAGE_PATH).First();
+            if (pathText == null) return;
+
+            var checkPathBtn = rootVisualElement.Query<Button>(CHECK_STORAGE_PATH).First();
+            if (checkPathBtn == null) return;
+
+            var checkResult = rootVisualElement.Query<TextElement>(STORAGE_PATH_RESULT).First();
+            if (checkResult == null) return;
+
+            Manager.onStoragePathChange.AddListener(isValidDir =>
+            {
+                checkResult.ClearClassList();
+                if (isValidDir)
+                {
+                    checkResult.AddToClassList("safe");
+                    checkResult.text = "Valid Path";
+                }
+                else
+                {
+                    checkResult.AddToClassList("error");
+                    checkResult.text = "Invalid Path";
+                }
+            });
+
+            checkPathBtn.clicked += () =>
+            {
+                Manager.SetMixerStoragePath(pathText.value);
+            };
+        }
+
+        private void SetupMixerView()
+        {
             SetupMixerListView();
-            SetupEffectScrollView();
+            SetupMixerManager();
+        }
+
+        private void SetupEffectView()
+        {
+            effectScrollView = rootVisualElement.Query<ScrollView>(EFFECT_VIEW);
+            SetupEffectManager();
+        }
+
+        private void ShowMixer(HDAudioMixerSO mixer)
+        {
+            effectScrollView.Clear();
+            foreach (var sfx in EditingMixer.Effects)
+                ShowEffect(sfx);
+        }
+
+        private void ShowEffect(HDAudioEffectSO sfx)
+        {
+            var sfxView = new Box();
+            sfxView.AddToClassList(EFFECT);
+            sfxView.Add(CreateTextElement(TITLE, sfx.Type.ToString()));
+
+            var sfxObj = new SerializedObject(sfx);
+
+            var sfxProp = sfxObj.GetIterator();
+            sfxProp.Next(true);
+
+            while (sfxProp.NextVisible(false))
+            {
+                var propField = new PropertyField(sfxProp);
+
+                propField.SetEnabled(sfxProp.name != "m_Script");
+                propField.Bind(sfxObj);
+                sfxView.Add(propField);
+            }
+
+            effectScrollView.Add(sfxView);
+        }
+
+        private TextElement CreateTextElement(string type, string text)
+        {
+            var textElement = new TextElement();
+            textElement.text = text;
+            textElement.AddToClassList(type);
+
+            return textElement;
+        }
+
+        [MenuItem("HerbiDino/Audio/Audio Mixer")]
+        private static void ShowWindow()
+        {
+            var window = GetWindow<HDAudioMixerEditor>();
+            window.titleContent = new GUIContent("Audio Mixer");
+        }
+
+        private void LoadVisualTreeAsset()
+        {
+            var tree = Resources.Load<VisualTreeAsset>("HDAudioMixerEditor").CloneTree();
+            rootVisualElement.Add(tree);
+
+            var style = Resources.Load<StyleSheet>("HDAudioMixerEditor_Style");
+            rootVisualElement.styleSheets.Add(style);
         }
 
         private void SetupMixerListView()
         {
-            mixerListView = rootVisualElement.Query<ListView>(MIXER_LIST);
+            mixerListView = rootVisualElement.Query<ListView>(MIXER_VIEW);
             mixerListView.itemsSource = Manager.MixerList;
             mixerListView.makeItem = () => new Label();
             mixerListView.bindItem = (element, index) => (element as Label).text = Manager.MixerList[index].name;
@@ -73,70 +185,56 @@ namespace HerbiDino.Audio
             });
         }
 
-        private void ShowMixer(HDAudioMixerSO mixer)
+        private void SetupMixerManager()
         {
-            effectScrollView.Clear();
-            foreach (var sfx in EditingMixer.Effects)
-                ShowEffect(sfx);
+            SetupMixerCreate();
+            SetupMixerRemove();
         }
 
-        private void ShowEffect(HDAudioEffectSO sfx)
+        private void SetupEffectManager()
         {
-            var sfxView = CreateEffectView(sfx);
-            effectScrollView.Add(sfxView);
+            SetupEffectCreate();
+            SetupEffectRemove();
         }
 
-        private Box CreateEffectView(HDAudioEffectSO sfx)
+        private void SetupMixerCreate()
         {
-            var sfxView = new Box();
-            sfxView.AddToClassList(EFFECT_VIEW);
-            sfxView.Add(CreateTextElement(TITLE, sfx.Type.ToString()));
+            var mixerName = rootVisualElement.Query<TextField>(MIXER_NAME).First();
+            if (mixerName == null) return;
 
-            var sfxObj = new SerializedObject(sfx);
+            var createMixerBtn = rootVisualElement.Query<Button>(CREATE_MIXER_BUTTON).First();
+            if (createMixerBtn == null) return;
 
-            var sfxProp = sfxObj.GetIterator();
-            sfxProp.Next(true);
-
-            while (sfxProp.NextVisible(false))
-            {
-                var propField = new PropertyField(sfxProp);
-
-                propField.SetEnabled(sfxProp.name != "m_Script");
-                propField.Bind(sfxObj);
-                sfxView.Add(propField);
-            }
-
-            return sfxView;
+            createMixerBtn.clicked += () => Manager.CreateMixer(mixerName.value);
         }
 
-        private void SetupEffectScrollView()
+        private void SetupMixerRemove()
         {
-            effectScrollView = rootVisualElement.Query<ScrollView>(EFFECT_LIST);
+            var removeMixerBtn = rootVisualElement.Query<Button>(REMOVE_MIXER_BUTTON).First();
+            if (removeMixerBtn == null) return;
+
+            removeMixerBtn.clicked += Manager.RemoveMixer;
         }
 
-        private TextElement CreateTextElement(string className, string text)
+        private void SetupEffectCreate()
         {
-            var textElement = new TextElement();
-            textElement.text = text;
-            textElement.AddToClassList(className);
+            var sfxType = rootVisualElement.Query<EnumField>(EFFECT_TYPE).First();
+            if (sfxType == null) return;
 
-            return textElement;
+            sfxType.Init(HDEffectType.Chorus);
+
+            var createEffectBtn = rootVisualElement.Query<Button>(CREATE_EFFECT_BUTTON).First();
+            if (createEffectBtn == null) return;
+
+            createEffectBtn.clicked += () => Manager.CreateEffect((HDEffectType)sfxType.value);
         }
 
-        [MenuItem("HerbiDino/Audio/Audio Mixer")]
-        private static void ShowWindow()
+        private void SetupEffectRemove()
         {
-            var window = GetWindow<HDAudioMixerEditor>();
-            window.titleContent = new GUIContent("Audio Mixer");
-        }
+            var removeEffectBtn = rootVisualElement.Query<Button>(REMOVE_EFFECT_BUTTON).First();
+            if (removeEffectBtn == null) return;
 
-        private void LoadVisualTreeAsset()
-        {
-            var tree = Resources.Load<VisualTreeAsset>("HDAudioMixerEditor").CloneTree();
-            rootVisualElement.Add(tree);
-
-            var style = Resources.Load<StyleSheet>("HDAudioMixerEditor_Style");
-            rootVisualElement.styleSheets.Add(style);
+            removeEffectBtn.clicked += () => Manager.RemoveEffect(0);
         }
     }
 }
