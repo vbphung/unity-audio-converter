@@ -10,8 +10,18 @@ namespace HerbiDino.Audio
 {
     public class HDAudioMixerEditor : EditorWindow
     {
-        private HDAudioMixerEditorManager manager;
-        private ListView mixerListView, effectListView;
+        private HDAudioMixerEditorManager Manager
+        {
+            get
+            {
+                manager ??= new HDAudioMixerEditorManager();
+                return manager;
+            }
+        }
+
+        private ListView mixerListView;
+        private ScrollView effectScrollView;
+        private HDAudioMixerEditorManager manager = null;
 
         private void OnEnable()
         {
@@ -21,18 +31,43 @@ namespace HerbiDino.Audio
 
         private void SetupManager()
         {
-            manager = new HDAudioMixerEditorManager();
-            manager.onMixerChange.AddListener(ShowMixer);
+            Manager.onMixerChange.AddListener(ShowMixer);
         }
 
         private void SetupVisual()
         {
             LoadVisualTreeAsset();
+
+            SetupMixerListView();
+            SetupEffectScrollView();
+        }
+
+        private void SetupMixerListView()
+        {
+            mixerListView = rootVisualElement.Query<ListView>("mixerLs");
+            mixerListView.itemsSource = manager.MixerList;
+            mixerListView.makeItem = () => new Label();
+            mixerListView.bindItem = (element, index) => (element as Label).text = manager.MixerList[index].name;
+            mixerListView.itemHeight = 20;
+            mixerListView.selectionType = SelectionType.Single;
+            mixerListView.onSelectionChange += mixers =>
+            {
+                foreach (var mixer in mixers)
+                {
+                    ShowMixer(mixer as HDAudioMixerSO);
+                    return;
+                }
+            };
         }
 
         private void ShowMixer(HDAudioMixerSO mixer)
         {
 
+        }
+
+        private void SetupEffectScrollView()
+        {
+            effectScrollView = rootVisualElement.Query<ScrollView>("effectLs");
         }
 
         [MenuItem("HerbiDino/Audio/Audio Mixer")]

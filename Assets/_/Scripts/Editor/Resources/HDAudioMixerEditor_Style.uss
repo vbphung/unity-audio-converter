@@ -13,6 +13,10 @@ Box {
   padding: 4px;
 }
 
+ListView {
+  flex: 1;
+}
+
 ScrollView {
   flex: 1;
 }
@@ -70,14 +74,14 @@ Button {
   margin-top: 4px;
 }
 
-#mixerLs {
+#mixerView {
   display: flex;
   flex-direction: column;
   margin: 0 4px;
   flex: 1;
 }
 
-#effectLs {
+#effectView {
   display: flex;
   flex-direction: column;
   margin-right: 4px;

@@ -14,8 +14,8 @@
     </engine:Box>
 
     <engine:VisualElement class="main">
-      <engine:Box class="section" name="mixerLs">
-        <engine:ScrollView />
+      <engine:Box class="section" name="mixerView">
+        <engine:ListView name="mixerLs" />
 
         <engine:Box class="mixer">
           <engine:TextElement text="Create Mixer" class="title" />
@@ -23,7 +23,7 @@
           <engine:Box class="input">
             <engine:TextElement text="Mixer Name" />
 
-            <engine:TextField name="new_mixer" />
+            <engine:TextField name="newMixer" />
           </engine:Box>
 
           <engine:Button text="Create Mixer" name="createMixerBtn" />
@@ -36,8 +36,8 @@
         </engine:Box>
       </engine:Box>
 
-      <engine:Box class="section" name="effectLs">
-        <engine:ScrollView />
+      <engine:Box class="section" name="effectView">
+        <engine:ScrollView name="effectLs" />
 
         <engine:Box class="effect">
           <engine:TextElement text="Create Effect" class="title" />

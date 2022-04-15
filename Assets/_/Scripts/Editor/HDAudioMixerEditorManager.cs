@@ -1,4 +1,4 @@
-using System.Linq;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +16,7 @@ namespace HerbiDino.Audio
                 onMixerChange?.Invoke(value);
             }
         }
+        public List<HDAudioMixerSO> MixerList { get; set; }
 
         public UnityEvent<HDAudioMixerSO> onMixerChange;
         public UnityEvent<HDAudioMixerSO> onCreateMixer;
@@ -35,6 +36,8 @@ namespace HerbiDino.Audio
             onRemoveMixer = new UnityEvent<bool>();
             onCreateEffect = new UnityEvent<HDAudioEffectSO>();
             onRemoveEffect = new UnityEvent<bool>();
+
+            LoadAllMixers();
         }
 
         public void SetMixerStoragePath(string path)
@@ -145,6 +148,19 @@ namespace HerbiDino.Audio
                     return ScriptableObject.CreateInstance<HDLowPassEffectSO>();
                 default:
                     return ScriptableObject.CreateInstance<HDReverbEffectSO>();
+            }
+        }
+
+        private void LoadAllMixers()
+        {
+            MixerList = new List<HDAudioMixerSO>();
+
+            var guids = AssetDatabase.FindAssets("t:HDAudioMixerSO");
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var mixer = AssetDatabase.LoadAssetAtPath<HDAudioMixerSO>(path);
+                MixerList.Add(mixer);
             }
         }
     }
