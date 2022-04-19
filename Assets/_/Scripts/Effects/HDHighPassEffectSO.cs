@@ -5,8 +5,17 @@ namespace HerbiDino.Audio
     public class HDHighPassEffectSO : HDAudioEffectSO
     {
         public override HDEffectType Type => HDEffectType.HighPass;
-        [field: SerializeField] public float HighpassResonaceQ { get; private set; }
-        [field: SerializeField] public float CutoffFrequency { get; private set; }
-        [field: SerializeField] public float HighpassResonanceQ { get; private set; }
+        [SerializeField] private float cutoffFrequency;
+        [SerializeField] private float highpassResonanceQ;
+
+        public override Component CreateFilter(GameObject audioSource)
+        {
+            var filter = audioSource.AddComponent(typeof(AudioHighPassFilter)) as AudioHighPassFilter;
+
+            filter.cutoffFrequency = cutoffFrequency;
+            filter.highpassResonanceQ = highpassResonanceQ;
+
+            return filter;
+        }
     }
 }

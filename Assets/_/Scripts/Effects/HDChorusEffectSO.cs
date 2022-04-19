@@ -5,12 +5,27 @@ namespace HerbiDino.Audio
     public class HDChorusEffectSO : HDAudioEffectSO
     {
         public override HDEffectType Type => HDEffectType.Chorus;
-        [field: SerializeField] public float DryMix { get; private set; }
-        [field: SerializeField] public float WetMix1 { get; private set; }
-        [field: SerializeField] public float WetMix2 { get; private set; }
-        [field: SerializeField] public float WetMix3 { get; private set; }
-        [field: SerializeField] public float Delay { get; private set; }
-        [field: SerializeField] public float Rate { get; private set; }
-        [field: SerializeField] public float Depth { get; private set; }
+        [SerializeField] private float dryMix;
+        [SerializeField] private float wetMix1;
+        [SerializeField] private float wetMix2;
+        [SerializeField] private float wetMix3;
+        [SerializeField] private float delay;
+        [SerializeField] private float rate;
+        [SerializeField] private float depth;
+
+        public override Component CreateFilter(GameObject audioSource)
+        {
+            var filter = audioSource.AddComponent(typeof(AudioChorusFilter)) as AudioChorusFilter;
+
+            filter.dryMix = dryMix;
+            filter.wetMix1 = wetMix1;
+            filter.wetMix2 = wetMix2;
+            filter.wetMix3 = wetMix3;
+            filter.delay = delay;
+            filter.rate = rate;
+            filter.depth = depth;
+
+            return filter;
+        }
     }
 }

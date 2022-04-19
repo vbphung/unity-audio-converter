@@ -6,9 +6,32 @@ namespace HerbiDino.Audio
     [RequireComponent(typeof(AudioSource))]
     public class HDAudioSource : MonoBehaviour
     {
-        [SerializeField] private AudioSource audioSource;
-        [SerializeField] private HDAudioMixerSO mixer;
+        private AudioSource audioSource;
+        private HDAudioMixerSO mixer;
+        private List<Component> filterList = new List<Component>();
 
-        private List<Behaviour> filterList;
+        private void Awake()
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        public void SetMixer(HDAudioMixerSO mixer)
+        {
+            ClearFilterList();
+
+            foreach (var sfx in mixer.Effects)
+            {
+                var filter = sfx.CreateFilter(gameObject);
+                filterList.Add(filter);
+            }
+        }
+
+        private void ClearFilterList()
+        {
+            foreach (var filter in filterList)
+                Destroy(filter);
+
+            filterList = new List<Component>();
+        }
     }
 }
