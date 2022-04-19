@@ -145,10 +145,17 @@ namespace HerbiDino.Audio
         {
             mixerListView = rootVisualElement.Query<ListView>(MixerUI.ListView);
             mixerListView.itemsSource = Manager.MixerList;
-            mixerListView.makeItem = () => new Label();
             mixerListView.bindItem = (element, index) => (element as Label).text = Manager.MixerList[index].name;
             mixerListView.itemHeight = 20;
             mixerListView.selectionType = SelectionType.Single;
+
+            mixerListView.makeItem = () =>
+            {
+                var item = new Label();
+                item.AddToClassList(MixerUI.View);
+                return item;
+            };
+
             mixerListView.onSelectionChange += mixers =>
             {
                 foreach (var mixer in mixers)

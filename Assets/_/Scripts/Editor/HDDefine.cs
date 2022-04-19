@@ -15,6 +15,7 @@ namespace HerbiDino.Audio
     public struct MixerUI
     {
         public const string ListView = "mixerLs";
+        public const string View = "mixer";
         public const string NameText = "newMixer";
         public const string CreateButton = "createMixerBtn";
         public const string RemoveButton = "removeMixerBtn";

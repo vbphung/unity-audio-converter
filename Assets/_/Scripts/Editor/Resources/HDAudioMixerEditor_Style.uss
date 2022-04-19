@@ -53,6 +53,11 @@ EnumField {
   background-color: black;
 }
 
+.mixer {
+  padding-left: 4px;
+  -unity-text-align: middle-left;
+}
+
 .effect {
   background-color: #202020;
   margin-bottom: 4px;
