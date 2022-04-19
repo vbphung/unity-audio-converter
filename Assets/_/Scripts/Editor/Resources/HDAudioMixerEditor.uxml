@@ -13,7 +13,7 @@
       <engine:TextElement
         class="error"
         text="Blank Path"
-        name="storagePathResult"
+        name="validStoragePath"
       />
 
       <engine:TextField name="storagePath" />

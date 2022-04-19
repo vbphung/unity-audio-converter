@@ -36,8 +36,6 @@ namespace HerbiDino.Audio
         private static string storagePath = null;
         private HDAudioMixerSO editingMixer;
 
-        private const string MIXER_ASSET = "Mixer.asset";
-
         public HDAudioMixerEditorManager()
         {
             onChangeStoragePath = new UnityEvent<bool>();
@@ -58,7 +56,7 @@ namespace HerbiDino.Audio
             var mixer = ScriptableObject.CreateInstance<HDAudioMixerSO>();
 
             AssetDatabase.CreateFolder(storagePath, name);
-            AssetDatabase.CreateAsset(mixer, $"{GetMixerDir(name)}{MIXER_ASSET}");
+            AssetDatabase.CreateAsset(mixer, $"{GetMixerDir(name)}{name}.asset");
             AssetDatabase.SaveAssets();
 
             LoadAllMixers();
