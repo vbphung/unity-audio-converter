@@ -29,7 +29,7 @@ namespace HerbiDino.Audio
         private void ClearFilterList()
         {
             foreach (var filter in filterList)
-                Destroy(filter);
+                DestroyImmediate(filter);
 
             filterList = new List<Component>();
         }
