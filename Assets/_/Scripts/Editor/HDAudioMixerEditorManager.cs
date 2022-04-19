@@ -65,12 +65,13 @@ namespace HerbiDino.Audio
 
         public void RemoveMixer()
         {
-            if (EditingMixer == null)
+            if (storagePath == null && EditingMixer == null)
             {
                 return;
             }
 
             AssetDatabase.DeleteAsset(GetMixerDir(EditingMixer.name));
+            AssetDatabase.Refresh();
 
             LoadAllMixers();
             EditingMixer = MixerList.Count > 0 ? MixerList[0] : null;
@@ -105,7 +106,7 @@ namespace HerbiDino.Audio
             EditingMixer.Effects.RemoveAt(sfxIndex);
 
             AssetDatabase.DeleteAsset(GetEffectDir(EditingMixer.name, sfx.Type));
-            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
 
             onChangeEditingMixer?.Invoke();
         }

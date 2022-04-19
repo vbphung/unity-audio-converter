@@ -19,7 +19,7 @@ namespace HerbiDino.Audio
             }
         }
 
-        private HDAudioMixerSO EditingMixer => Manager.EditingMixer;
+        private HDAudioMixerSO EditingMixer { get => Manager.EditingMixer; set => Manager.EditingMixer = value; }
 
         private ListView mixerListView;
         private ScrollView effectScrollView;
@@ -89,7 +89,7 @@ namespace HerbiDino.Audio
 
             if (mixer == null) return;
 
-            foreach (var sfx in EditingMixer.Effects)
+            foreach (var sfx in mixer.Effects)
                 ShowEffect(sfx);
         }
 
@@ -153,7 +153,7 @@ namespace HerbiDino.Audio
             {
                 foreach (var mixer in mixers)
                 {
-                    ShowMixer(mixer as HDAudioMixerSO);
+                    EditingMixer = mixer as HDAudioMixerSO;
                     return;
                 }
             };
