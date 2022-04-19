@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
@@ -48,13 +45,13 @@ namespace HerbiDino.Audio
 
         private void SetupStoragePath()
         {
-            var pathText = rootVisualElement.Query<TextField>(StorageUI.InputField).First();
+            var pathText = rootVisualElement.Query<TextField>(HDStorageView.InputField).First();
             if (pathText == null) return;
 
-            var checkPathBtn = rootVisualElement.Query<Button>(StorageUI.CheckButton).First();
+            var checkPathBtn = rootVisualElement.Query<Button>(HDStorageView.CheckButton).First();
             if (checkPathBtn == null) return;
 
-            var checkResult = rootVisualElement.Query<TextElement>(StorageUI.ValidityText).First();
+            var checkResult = rootVisualElement.Query<TextElement>(HDStorageView.ValidityText).First();
             if (checkResult == null) return;
 
             if (Manager.StoragePath != null)
@@ -79,7 +76,7 @@ namespace HerbiDino.Audio
 
         private void SetupEffectView()
         {
-            effectScrollView = rootVisualElement.Query<ScrollView>(EffectUI.ListView);
+            effectScrollView = rootVisualElement.Query<ScrollView>(HDEffectView.ListView);
             SetupEffectManager();
         }
 
@@ -87,17 +84,21 @@ namespace HerbiDino.Audio
         {
             effectScrollView.Clear();
 
-            if (mixer == null) return;
+            if (mixer == null || mixer.Effects.Count == 0) return;
 
-            foreach (var sfx in mixer.Effects)
-                ShowEffect(sfx);
+            effectScrollView.Add(new HDAudioEffectDestination(0));
+
+            for (int i = 0; i < mixer.Effects.Count; ++i)
+            {
+                ShowEffect(mixer.Effects[i]);
+                effectScrollView.Add(new HDAudioEffectDestination(i + 1));
+            }
         }
 
         private void ShowEffect(HDAudioEffectSO sfx)
         {
-            var sfxView = new Box();
-            sfxView.AddToClassList(EffectUI.View);
-            sfxView.Add(CreateTextElement(UI.TitleText, sfx.Type.ToString()));
+            var sfxView = new HDAudioEffectSource(0);
+            sfxView.Add(CreateTextElement(HDEditor.TitleText, sfx.Type.ToString()));
 
             var sfxObj = new SerializedObject(sfx);
 
@@ -143,7 +144,7 @@ namespace HerbiDino.Audio
 
         private void SetupMixerListView()
         {
-            mixerListView = rootVisualElement.Query<ListView>(MixerUI.ListView);
+            mixerListView = rootVisualElement.Query<ListView>(HDMixerView.ListView);
             mixerListView.itemsSource = Manager.MixerList;
             mixerListView.bindItem = (element, index) => (element as Label).text = Manager.MixerList[index].name;
             mixerListView.itemHeight = 20;
@@ -152,7 +153,7 @@ namespace HerbiDino.Audio
             mixerListView.makeItem = () =>
             {
                 var item = new Label();
-                item.AddToClassList(MixerUI.View);
+                item.AddToClassList(HDMixerView.View);
                 return item;
             };
 
@@ -186,10 +187,10 @@ namespace HerbiDino.Audio
 
         private void SetupMixerCreate()
         {
-            var mixerName = rootVisualElement.Query<TextField>(MixerUI.NameText).First();
+            var mixerName = rootVisualElement.Query<TextField>(HDMixerView.NameText).First();
             if (mixerName == null) return;
 
-            var createMixerBtn = rootVisualElement.Query<Button>(MixerUI.CreateButton).First();
+            var createMixerBtn = rootVisualElement.Query<Button>(HDMixerView.CreateButton).First();
             if (createMixerBtn == null) return;
 
             createMixerBtn.clicked += () => Manager.CreateMixer(mixerName.value);
@@ -197,7 +198,7 @@ namespace HerbiDino.Audio
 
         private void SetupMixerRemove()
         {
-            var removeMixerBtn = rootVisualElement.Query<Button>(MixerUI.RemoveButton).First();
+            var removeMixerBtn = rootVisualElement.Query<Button>(HDMixerView.RemoveButton).First();
             if (removeMixerBtn == null) return;
 
             removeMixerBtn.clicked += Manager.RemoveMixer;
@@ -205,12 +206,12 @@ namespace HerbiDino.Audio
 
         private void SetupEffectCreate()
         {
-            var sfxType = rootVisualElement.Query<EnumField>(EffectUI.TypeDropdown).First();
+            var sfxType = rootVisualElement.Query<EnumField>(HDEffectView.TypeDropdown).First();
             if (sfxType == null) return;
 
             sfxType.Init(HDEffectType.Chorus);
 
-            var createEffectBtn = rootVisualElement.Query<Button>(EffectUI.CreateButton).First();
+            var createEffectBtn = rootVisualElement.Query<Button>(HDEffectView.CreateButton).First();
             if (createEffectBtn == null) return;
 
             createEffectBtn.clicked += () => Manager.CreateEffect((HDEffectType)sfxType.value);
@@ -218,7 +219,7 @@ namespace HerbiDino.Audio
 
         private void SetupEffectRemove()
         {
-            var removeEffectBtn = rootVisualElement.Query<Button>(EffectUI.RemoveButton).First();
+            var removeEffectBtn = rootVisualElement.Query<Button>(HDEffectView.RemoveButton).First();
             if (removeEffectBtn == null) return;
 
             removeEffectBtn.clicked += () => Manager.RemoveEffect(0);

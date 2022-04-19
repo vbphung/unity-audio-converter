@@ -16,6 +16,7 @@ namespace HerbiDino.Audio
                 onChangeMixer?.Invoke(value);
             }
         }
+
         public string StoragePath
         {
             get
@@ -42,6 +43,7 @@ namespace HerbiDino.Audio
                 onChangeStoragePath?.Invoke(isValidDir);
             }
         }
+
         public List<HDAudioMixerSO> MixerList { get; set; }
 
         public UnityEvent<bool> onChangeStoragePath;

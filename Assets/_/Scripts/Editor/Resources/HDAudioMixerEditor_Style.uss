@@ -2,7 +2,7 @@ TemplateContainer {
   flex-grow: 1;
 }
 
-Box {
+.unity-box {
   border-radius: 4px;
   padding: 4px;
 }
@@ -60,7 +60,16 @@ EnumField {
 
 .effect {
   background-color: #202020;
-  margin-bottom: 4px;
+}
+
+.effectDragDestination {
+  height: 4px;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.effectDragDestinationHover {
+  background-color: yellow;
 }
 
 .title {
@@ -108,5 +117,6 @@ EnumField {
   display: flex;
   flex-direction: column;
   margin-right: 4px;
+  padding-top: 0;
   flex: 3;
 }
