@@ -246,7 +246,7 @@ namespace HerbiDino.Audio
             return new HDAudioEffectDestination(
                 () => EffectDraggingManager.DestinationIndex = desIndex,
                 EffectDraggingManager.ResetDestination,
-                EffectDraggingManager.SwapEffects
+                EffectDraggingManager.SwapTwoEffects
             );
         }
     }

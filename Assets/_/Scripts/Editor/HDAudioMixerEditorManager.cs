@@ -64,6 +64,7 @@ namespace HerbiDino.Audio
             onChangeEditingMixer = new UnityEvent();
 
             EffectDraggingManager = new HDAudioEffectDraggingManager();
+            EffectDraggingManager.onSwapEffects.AddListener(() => onChangeEditingMixer?.Invoke());
 
             LoadAllMixers();
         }
