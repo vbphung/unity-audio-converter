@@ -17,6 +17,7 @@ namespace HerbiDino.Audio
         }
 
         private HDAudioMixerSO EditingMixer { get => Manager.EditingMixer; set => Manager.EditingMixer = value; }
+        private HDAudioEffectDraggingManager EffectDraggingManager => Manager.EffectDraggingManager;
 
         private ListView mixerListView;
         private ScrollView effectScrollView;
@@ -86,18 +87,18 @@ namespace HerbiDino.Audio
 
             if (mixer == null || mixer.Effects.Count == 0) return;
 
-            effectScrollView.Add(new HDAudioEffectDestination(0));
+            effectScrollView.Add(CreateEffectDestination(0));
 
             for (int i = 0; i < mixer.Effects.Count; ++i)
             {
-                ShowEffect(mixer.Effects[i]);
-                effectScrollView.Add(new HDAudioEffectDestination(i + 1));
+                ShowEffect(mixer.Effects[i], i);
+                effectScrollView.Add(CreateEffectDestination(i + 1));
             }
         }
 
-        private void ShowEffect(HDAudioEffectSO sfx)
+        private void ShowEffect(HDAudioEffectSO sfx, int sfxIndex)
         {
-            var sfxView = new HDAudioEffectSource(0);
+            var sfxView = new HDAudioEffectSource(() => EffectDraggingManager.SourceIndex = sfxIndex);
             sfxView.Add(CreateTextElement(HDEditor.TitleText, sfx.Type.ToString()));
 
             var sfxObj = new SerializedObject(sfx);
@@ -238,6 +239,15 @@ namespace HerbiDino.Audio
                 stateText.AddToClassList("error");
                 stateText.text = "Invalid Path";
             }
+        }
+
+        private HDAudioEffectDestination CreateEffectDestination(int desIndex)
+        {
+            return new HDAudioEffectDestination(
+                () => EffectDraggingManager.DestinationIndex = desIndex,
+                EffectDraggingManager.ResetDestination,
+                EffectDraggingManager.SwapEffects
+            );
         }
     }
 }

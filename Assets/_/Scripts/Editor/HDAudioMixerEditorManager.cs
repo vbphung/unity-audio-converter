@@ -13,6 +13,7 @@ namespace HerbiDino.Audio
             set
             {
                 editingMixer = value;
+                EffectDraggingManager.CurrentMixer = value;
                 onChangeMixer?.Invoke(value);
             }
         }
@@ -45,6 +46,7 @@ namespace HerbiDino.Audio
         }
 
         public List<HDAudioMixerSO> MixerList { get; set; }
+        public HDAudioEffectDraggingManager EffectDraggingManager { get; private set; }
 
         public UnityEvent<bool> onChangeStoragePath;
         public UnityEvent onChangeMixerList;
@@ -60,6 +62,8 @@ namespace HerbiDino.Audio
             onChangeMixerList = new UnityEvent();
             onChangeMixer = new UnityEvent<HDAudioMixerSO>();
             onChangeEditingMixer = new UnityEvent();
+
+            EffectDraggingManager = new HDAudioEffectDraggingManager();
 
             LoadAllMixers();
         }

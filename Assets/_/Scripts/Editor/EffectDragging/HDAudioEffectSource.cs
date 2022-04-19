@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,12 +7,13 @@ namespace HerbiDino.Audio
 {
     public class HDAudioEffectSource : Box, IHDAudioEffectItem
     {
-        public int Index { get; set; }
+        private Action onPointerDown;
 
-        public HDAudioEffectSource(int index) : base()
+        public HDAudioEffectSource(Action onPointerDow) : base()
         {
-            Index = index;
             AddToClassList(HDEffectView.View);
+
+            this.onPointerDown = onPointerDow;
             RegisterPointerEvents();
         }
 
@@ -19,7 +21,7 @@ namespace HerbiDino.Audio
         {
             RegisterCallback<PointerDownEvent>(ptr =>
             {
-
+                onPointerDown();
             });
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,12 +7,18 @@ namespace HerbiDino.Audio
 {
     public class HDAudioEffectDestination : VisualElement, IHDAudioEffectItem
     {
-        public int Index { get; set; }
+        private Action onPointerEnter;
+        private Action onPointerLeave;
+        private Action onPointerUp;
 
-        public HDAudioEffectDestination(int index) : base()
+        public HDAudioEffectDestination(Action onPointerEnter, Action onPointerLeave, Action onPointerUp) : base()
         {
-            Index = index;
             AddToClassList(HDEffectView.DragDestination);
+
+            this.onPointerEnter = onPointerEnter;
+            this.onPointerLeave = onPointerLeave;
+            this.onPointerUp = onPointerUp;
+
             RegisterPointerEvents();
         }
 
@@ -20,18 +27,25 @@ namespace HerbiDino.Audio
             RegisterCallback<PointerEnterEvent>(ptr =>
             {
                 if (Event.current.type == EventType.MouseDrag)
+                {
                     AddToClassList(HDEffectView.DragDestinationHover);
+                    onPointerEnter();
+                }
             });
 
             RegisterCallback<PointerLeaveEvent>(ptr =>
             {
                 if (Event.current.type == EventType.MouseDrag)
+                {
                     RemoveFromClassList(HDEffectView.DragDestinationHover);
+                    onPointerLeave();
+                }
             });
 
             RegisterCallback<PointerUpEvent>(ptr =>
             {
                 RemoveFromClassList(HDEffectView.DragDestinationHover);
+                onPointerUp();
             });
         }
     }
