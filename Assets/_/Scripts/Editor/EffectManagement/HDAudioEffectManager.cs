@@ -3,17 +3,18 @@ using UnityEditor;
 
 namespace HerbiDino.Audio
 {
-    public class HDAudioEffectDraggingManager
+    public class HDAudioEffectManager
     {
         public UnityEvent onSwapEffects;
 
         public HDAudioMixerSO CurrentMixer { get; set; }
         public int SourceIndex { get; set; }
         public int DestinationIndex { get; set; }
+        public int CurrentEffectIndex { get; set; } = 0;
 
         private bool CanSwap => DestinationIndex < SourceIndex || DestinationIndex > SourceIndex + 1;
 
-        public HDAudioEffectDraggingManager()
+        public HDAudioEffectManager()
         {
             onSwapEffects = new UnityEvent();
             ResetIndices();
