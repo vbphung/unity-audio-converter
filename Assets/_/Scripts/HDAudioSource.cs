@@ -22,7 +22,8 @@ namespace HerbiDino.Audio
             foreach (var sfx in mixer.Effects)
             {
                 var filter = sfx.CreateFilter(gameObject);
-                filterList.Add(filter);
+                if (filter != null)
+                    filterList.Add(filter);
             }
         }
 

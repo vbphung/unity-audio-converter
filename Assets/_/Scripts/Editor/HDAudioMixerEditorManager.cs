@@ -170,8 +170,10 @@ namespace HerbiDino.Audio
                     return ScriptableObject.CreateInstance<HDHighPassEffectSO>();
                 case HDEffectType.LowPass:
                     return ScriptableObject.CreateInstance<HDLowPassEffectSO>();
-                default:
+                case HDEffectType.Reverb:
                     return ScriptableObject.CreateInstance<HDReverbEffectSO>();
+                default:
+                    return ScriptableObject.CreateInstance<HDAudioPitchShifterEffectSO>();
             }
         }
 

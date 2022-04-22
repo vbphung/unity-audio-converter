@@ -7,6 +7,7 @@ namespace HerbiDino.Audio
         Echo,
         HighPass,
         LowPass,
-        Reverb
+        Reverb,
+        PitchShifter
     }
 }

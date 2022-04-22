@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cea8e9985d3c584ca671512b0e8c96a, type: 3}
-  m_Name: VoiceMixer
+  m_Script: {fileID: 11500000, guid: df90c4ee6a91adf4ab4c99ef578bc9e5, type: 3}
+  m_Name: PitchShifter
   m_EditorClassIdentifier: 
-  <Effects>k__BackingField:
-  - {fileID: 11400000, guid: 8eee16429bf34e64aa8b0368a3af4816, type: 2}
-  - {fileID: 11400000, guid: bdae5995cdabd674393dc50a72eb2958, type: 2}
+  pitch: 0
