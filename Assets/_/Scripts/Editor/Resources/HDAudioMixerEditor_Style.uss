@@ -62,6 +62,11 @@ EnumField {
   background-color: #202020;
 }
 
+.effectSelected {
+  border-color: white;
+  border-width: 1px;
+}
+
 .effectDragDestination {
   height: 4px;
   width: 100%;

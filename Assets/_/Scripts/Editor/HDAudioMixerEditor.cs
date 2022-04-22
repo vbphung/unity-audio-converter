@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using System.Collections.Generic;
 
 namespace HerbiDino.Audio
 {
@@ -84,6 +85,7 @@ namespace HerbiDino.Audio
         private void ShowMixer(HDAudioMixerSO mixer)
         {
             effectScrollView.Clear();
+            EffectManager.EffectList = new List<HDAudioEffect>();
 
             if (mixer == null || mixer.Effects.Count == 0) return;
 
@@ -116,6 +118,7 @@ namespace HerbiDino.Audio
             }
 
             effectScrollView.Add(sfxView);
+            EffectManager.EffectList.Add(sfxView);
         }
 
         private TextElement CreateTextElement(string type, string text)

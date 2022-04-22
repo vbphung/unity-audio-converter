@@ -24,5 +24,15 @@ namespace HerbiDino.Audio
             RegisterCallback<PointerDownEvent>(ptr => onPointerDown());
             RegisterCallback<ClickEvent>(evt => onClick());
         }
+
+        public void Select()
+        {
+            AddToClassList(HDEffectView.SelectedView);
+        }
+
+        public void Deselect()
+        {
+            RemoveFromClassList(HDEffectView.SelectedView);
+        }
     }
 }

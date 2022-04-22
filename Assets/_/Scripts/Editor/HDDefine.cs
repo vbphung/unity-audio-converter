@@ -25,6 +25,7 @@ namespace HerbiDino.Audio
     {
         public const string ListView = "effectLs";
         public const string View = "effect";
+        public const string SelectedView = "effectSelected";
         public const string DragDestination = "effectDragDestination";
         public const string DragDestinationHover = "effectDragDestinationHover";
         public const string TypeDropdown = "effectType";
