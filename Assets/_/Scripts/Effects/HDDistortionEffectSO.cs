@@ -5,7 +5,8 @@ namespace HerbiDino.Audio
     public class HDDistortionEffectSO : HDAudioEffectSO
     {
         public override HDEffectType Type => HDEffectType.Distortion;
-        [SerializeField] private float distortionLevel;
+
+        [SerializeField][Range(0, 1)] private float distortionLevel;
 
         public override Component CreateFilter(GameObject audioSource)
         {
