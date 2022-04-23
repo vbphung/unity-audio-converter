@@ -19,12 +19,17 @@ namespace HerbiDino.Audio
         {
             ClearFilterList();
 
+            var hasPitchShifter = false;
             foreach (var sfx in mixer.Effects)
             {
                 var filter = sfx.CreateFilter(gameObject);
                 if (filter != null)
                     filterList.Add(filter);
+                else hasPitchShifter = true;
             }
+
+            if (!hasPitchShifter)
+                audioSource.pitch = 1;
         }
 
         private void ClearFilterList()

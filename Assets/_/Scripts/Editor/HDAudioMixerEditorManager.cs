@@ -177,24 +177,15 @@ namespace HerbiDino.Audio
             }
         }
 
-        private void LoadAllMixers()
-        {
-            MixerList = new List<HDAudioMixerSO>();
-
-            var guids = AssetDatabase.FindAssets("t:HDAudioMixerSO");
-            foreach (var guid in guids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var mixer = AssetDatabase.LoadAssetAtPath<HDAudioMixerSO>(path);
-                MixerList.Add(mixer);
-            }
-
-            onChangeMixerList?.Invoke();
-        }
-
         private bool IsValidStorageDir(string storageDir)
         {
             return AssetDatabase.IsValidFolder(storageDir);
+        }
+
+        private void LoadAllMixers()
+        {
+            MixerList = HDAudioMixerManager.LoadAllMixers();
+            onChangeMixerList?.Invoke();
         }
     }
 }
