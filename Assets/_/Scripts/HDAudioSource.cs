@@ -15,6 +15,12 @@ namespace HerbiDino.Audio
             audioSource = GetComponent<AudioSource>();
         }
 
+        public void SetMixer(string name)
+        {
+            var mixer = HDAudioMixerManager.Instance.GetMixer(name);
+            SetMixer(mixer);
+        }
+
         public void SetMixer(HDAudioMixerSO mixer)
         {
             ClearFilterList();

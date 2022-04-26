@@ -1,12 +1,20 @@
 using System.Collections.Generic;
-using UnityEditor;
+using System.Linq;
+using UnityEngine;
 
 namespace HerbiDino.Audio
 {
-    public class HDAudioMixerManager
+    public class HDAudioMixerManager : HDSingleton<HDAudioMixerManager>
     {
-        private static Dictionary<string, HDAudioMixerSO> mixerDict = null;
-        private static Dictionary<string, HDAudioMixerSO> MixerDict
+        [SerializeField] private string storagePath = null;
+
+        public HDAudioMixerSO GetMixer(string name)
+        {
+            return MixerDict[name];
+        }
+
+        private Dictionary<string, HDAudioMixerSO> mixerDict = null;
+        private Dictionary<string, HDAudioMixerSO> MixerDict
         {
             get
             {
@@ -14,45 +22,23 @@ namespace HerbiDino.Audio
                 {
                     mixerDict = new Dictionary<string, HDAudioMixerSO>();
 
-                    var mixerLs = MixerList;
+                    var mixerLs = LoadAllMixers();
                     foreach (var mixer in mixerLs)
+                    {
+                        if (mixer == null) continue;
                         mixerDict[mixer.name] = mixer;
+                    }
                 }
 
                 return mixerDict;
             }
         }
 
-        private static List<HDAudioMixerSO> mixerLs = null;
-        private static List<HDAudioMixerSO> MixerList
+        private List<HDAudioMixerSO> LoadAllMixers()
         {
-            get
-            {
-                if (mixerLs == null)
-                    mixerLs = LoadAllMixers();
-
-                return mixerLs;
-            }
-        }
-
-        public static HDAudioMixerSO GetMixerByName(string name)
-        {
-            return MixerDict[name];
-        }
-
-        public static List<HDAudioMixerSO> LoadAllMixers()
-        {
-            var mixers = new List<HDAudioMixerSO>();
-
-            var guids = AssetDatabase.FindAssets("t:HDAudioMixerSO");
-            foreach (var guid in guids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var mixer = AssetDatabase.LoadAssetAtPath<HDAudioMixerSO>(path);
-                mixers.Add(mixer);
-            }
-
-            return mixers;
+            var objs = Resources.LoadAll(storagePath, typeof(HDAudioMixerSO));
+            var mixers = objs.Select(obj => obj as HDAudioMixerSO);
+            return mixers.ToList();
         }
     }
 }
