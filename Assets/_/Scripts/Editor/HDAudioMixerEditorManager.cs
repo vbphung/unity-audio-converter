@@ -79,7 +79,7 @@ namespace HerbiDino.Audio
             var mixer = ScriptableObject.CreateInstance<HDAudioMixerSO>();
 
             AssetDatabase.CreateFolder(storagePath, name);
-            AssetDatabase.CreateAsset(mixer, $"{GetMixerDir(name)}{name}.asset");
+            AssetDatabase.CreateAsset(mixer, $"{StoragePath}/{name}.asset");
             AssetDatabase.SaveAssets();
 
             LoadAllMixers();
